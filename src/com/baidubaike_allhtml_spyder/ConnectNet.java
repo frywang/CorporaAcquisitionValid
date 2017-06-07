@@ -9,6 +9,7 @@ public class ConnectNet {
 	
 	public static Document getDom(String url) throws IOException {
 		Document document = Jsoup.connect(url).get();
+		
 		return document;
 	}
 	

@@ -1,57 +1,53 @@
 package com.baidubaike_content_spyder;
 
 import java.io.IOException;
-import java.net.URLStreamHandler;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.baidubaike_allhtml_spyder.ConnectNet;
-import com.baidubaike_allhtml_spyder.Store;
-import com.baidubaike_allhtml_spyder.URLManager;
-
 public class ConceptDisambiguation {
 
-	public static void main(String[] args) throws IOException {
-		/*根url，python词条页面*/
-		String rooturl = "http://baike.baidu.com/item/%E5%A4%A9%E7%A5%9E";
-		Document rootdocument = Jsoup.connect(rooturl).get();
-		int index=1;
-		ContentParse parseHtml = new ContentParse();
-		ConnectNet connectNet = new ConnectNet();
-		Store store = new Store();
-		/*放置要迭代的url*/
-		List<String> urls = new ArrayList<>();
-		/*放置简介字符串*/
-		List<String> contents = new ArrayList<>();
-		
-		parseHtml.parse_a(rootdocument, urls);
-		URLManager urlManager = new URLManager();
-		/*纯粹用来计数*/
-		int flag=1;
-		/*
-		 * 首先判断url集合里面是否还有可以爬取的url，然后从中按照顺序获取一个URL
-		 * 然后URL管理器继续进行添加新的url，从提取出的URL获取dom对象，进行解析，存入txt文本，
-		 * 循环进行，直到没有新的url可以爬取。
-		 */
-		while(urls!=null) {
-			String url = urls.get(index-1);
-			index+=1;
-			urlManager.getNewURL(urls);
-			Document document = connectNet.getDom(url);
-			parseHtml.parse_content(document, contents);
-			store.store_contents(contents);
-			System.out.println("StartSpyder.main()");
-			System.out.println(flag);
-			flag+=1;
+	public void parse_a(Document document,String rooturl,List<String> urls) throws IOException {
+
+
+		//		System.out.println(document.toString());
+
+		/*提取出href属性里面/item以及后面的字符*/
+		Elements a = document.select("div.polysemantList-header-title");
+
+		/*判断是歧义标签是否为空，如果为空则说明是没有歧义项*/
+		if(a.isEmpty()){
+			urls.add(rooturl);
+		}else {
+			boolean flag = false;
+			Elements briefIntros = document.select("dd.h2");
+			for(Element briefIntr:briefIntros){
+				String briefIntrod = briefIntros.attr("title");
+				if((briefIntrod.indexOf("喜羊羊")!=-1)){
+					urls.add(rooturl);
+					flag =true;
+					break;
+				}
+			}
+			if(!flag){
+				Elements rawlinks = document.select("li.item > a");
+				for(Element e:rawlinks){
+					String title = e.attr("title");
+					String url  = "https://baike.baidu.com"+e.attr("href"); 
+					if((title.indexOf("喜羊羊")!=-1)){
+						urls.add(url);
+						break;
+					}else{	
+						urls.add(rooturl);
+					}
+				}
+			}
+
+
 		}
+
 
 	}
 
