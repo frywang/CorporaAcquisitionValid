@@ -19,13 +19,16 @@ public class ContentParse {
 
 	
 	public void parse_content(Document document,List<String> contents ) {
-
 		
+		Elements titles = document.select("h1");
+		Element title1 = titles.first();
+		String conceptTitle = title1.text().toString();
+
 		/*获得summary*/
 		Elements summarys = document.select("div.lemma-summary");
 		for(Element sumarry:summarys){
-			contents.add(sumarry.text());
-			System.out.println("summary###"+sumarry.text());
+			contents.add(conceptTitle+"###summary###"+sumarry.text());
+			System.out.println(conceptTitle+"###summary###"+sumarry.text());
 		}
 		
 		/*获得infobox里面的内容*/
@@ -35,11 +38,11 @@ public class ContentParse {
 			String rawinfoName = e.toString().replace("&nbsp;","");
 			/*通过Jsoup.parse()把处理过的字符串转成Ｄocument，再通过Ｄocument.text()得到处理过的内容*/
 			Document d = Jsoup.parse(rawinfoName);
-			System.out.print("basicInfo###"+d.text());
+			System.out.print(conceptTitle+"###basicInfo###"+d.text());
 			/*获得infobox里面的value*/
 			Element value = e.nextElementSibling();
 			if(null != value){
-				contents.add("basicInfo###"+d.text()+"###::"+value.text());
+				contents.add(conceptTitle+"###basicInfo###"+d.text()+"###::"+value.text());
 				System.out.println("###::"+value.text());
 			}
 

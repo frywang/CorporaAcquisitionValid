@@ -15,8 +15,6 @@ public class Store {
 			fileWriter.write(contents.get(i));
 			/*换行和分隔*/
 			fileWriter.write("\r\n");
-			fileWriter.write("-----------");
-			fileWriter.write("\r\n");
 			fileWriter.flush();
 		}
 		
