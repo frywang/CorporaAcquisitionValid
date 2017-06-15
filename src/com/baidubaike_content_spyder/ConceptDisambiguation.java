@@ -21,7 +21,9 @@ public class ConceptDisambiguation {
 			Element summry1 = summarys.first();
 			String summary1 = summry1.text().toString();
 			/*如果概念简介包含查找要素，则加入可用url列表*/
-			if (summary1.indexOf("喜羊羊") != -1) {
+//			if ((summary1.indexOf("羊羊") != -1)|(summary1.indexOf("狼") != -1)) {
+//			if (summary1.indexOf("熊") != -1) {
+			if ((summary1.indexOf("西游") != -1)|(summary1.indexOf("哪吒") != -1)) {
 				urls.add(rooturl);
 			} else {
 				/*查看概念的多个义项*/
@@ -37,7 +39,9 @@ public class ConceptDisambiguation {
 					for (Element e : rawlinks) {
 						String title = e.attr("title");
 						String url = "https://baike.baidu.com" + e.attr("href");
-						if ((title.indexOf("羊") != -1)) {
+//						if ((title.indexOf("羊") != -1)) {
+//						if ((title.indexOf("熊") != -1)) {
+						if ((summary1.indexOf("西游") != -1)|(summary1.indexOf("哪吒") != -1)) {						
 							urls.add(url);
 							flag1 = true;
 							break;
