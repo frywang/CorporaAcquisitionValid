@@ -29,7 +29,9 @@ public class StartGathering {
 		
 //		String filepath = "喜羊羊与灰太狼人物列表.txt";
 //		String filepath = "熊出没人物列表.txt";
-		String filepath = "西游记人物列表.txt";
+//		String filepath = "西游记人物列表.txt";
+//		String filepath = "历史人物列表.txt";
+		String filepath = "test.txt";
 		
 		/*所有的概念列表*/
 		List<String> rooturls = ReadAndWrite.readFile(filepath);
@@ -55,7 +57,8 @@ public class StartGathering {
 			File rightUrls = new File("rightUrl.txt");
 			
 			/*分别保存正确的生成页面和错误的生成页面*/
-			disamb.parse_a(rootdocument,rooturl,urls,questionUrls);
+//			disamb.parse_a(rootdocument,rooturl,urls,questionUrls);
+			disamb.parse_b(rootdocument,rooturl,urls,questionUrls);
 			store.store_contents(questionUrls,wrongUrls);
 			store.store_contents(urls,rightUrls);
 
@@ -80,7 +83,7 @@ public class StartGathering {
 		 * 循环进行，直到没有新的url可以爬取。
 		 */
 		/*要写入的文档*/
-		File file = new File("西游记infobox.txt");
+		File file = new File("test历史人物infobox.txt");
 		for(String url:urls){
 			Document document = connectNet.getDom(url);
 			parseHtml.parse_content(document, contents);

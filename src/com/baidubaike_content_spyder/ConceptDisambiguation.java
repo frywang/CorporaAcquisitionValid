@@ -59,6 +59,36 @@ public class ConceptDisambiguation {
 		}
 	}
 
+	
+	public void parse_b(Document document, String rooturl, List<String> urls, List<String> questionUrls)
+			throws IOException{
+		/*查找概念简介*/
+		Elements summarys = document.select("div.lemma-summary");
+		/*遇到完全没有正文内容的消歧页面，查消歧词条，例如http://baike.baidu.com/item/韩信*/		
+		Elements polysemes= document.select("div.para > a");
+
+		System.out.println("afdafasdfafsdafsdafasfsda");
+//		System.out.println(firtsPolyseme.toString());
+
+
+		/*如果没有概念简介，则加入有问题的url列表*/
+		if(summarys.isEmpty()){
+			if(!polysemes.isEmpty()){
+				Element firtsPolyseme = polysemes.get(0);
+				String url = "https://baike.baidu.com" + firtsPolyseme.attr("href");
+				urls.add(url);
+			}else{
+				questionUrls.add(rooturl);
+			}
+
+		}else{
+			/*如果有概念简介，则判断概念简介是否包含查找要素*/
+			Element summry1 = summarys.first();
+			String summary1 = summry1.text().toString();
+			/*如果概念简介包含查找要素，则加入可用url列表*/
+			urls.add(rooturl);
+		}
+	}
 }
 
 
