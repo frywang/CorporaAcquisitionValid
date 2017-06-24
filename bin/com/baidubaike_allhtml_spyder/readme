@@ -1,0 +1,3 @@
+原文代码介绍见于　http://blog.csdn.net/coder_py/article/details/71046353
+
+本实例爬取关于Python词条页面及关联词条页面的简介，把词条的简介写入txt文本中。
